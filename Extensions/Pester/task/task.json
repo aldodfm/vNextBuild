@@ -45,7 +45,7 @@
       "defaultValue": "$(Build.SourcesDirectory)\\*",
       "required": true,
       "helpMarkDown": "Folder to run scripts from",
-      "visibleRule": "mode = useScriptFolder"
+      "visibleRule": "useScriptFolder = true"
     },
     {
       "name": "script",
@@ -54,7 +54,7 @@
       "defaultValue": "@{Path='$(Build.SourcesDirectory)'; Parameters=@{param1=\"111\"; param2=\"222\"}}",
       "required": true,
       "helpMarkDown": "Script parmaters to run",
-      "visibleRule": "mode != useScriptFolder"
+      "visibleRule": "useScriptFolder = false"
     },
     {
       "name": "resultsFile",
