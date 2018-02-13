@@ -241,7 +241,7 @@ Describe "Testing Pester Task" {
             Mock Write-Warning { }
             Mock Write-Error { }
 
-            &$sut -ResultsFile TestDrive:\output.xml -ForceUseOfPesterInTasks "False" -script "@{Path='.'; Parameters=@{fancypants=`"$SecretValueFromVstsBecauseIDoNotWantToHardcodeInfrastructureRelatedStuffLikeMachineNamesOrCredentials`"; port=$port}}"
+            &$sut -ResultsFile TestDrive:\output.xml -UseScriptFolder False -ForceUseOfPesterInTasks "False" -script "@{Path='.'; Parameters=@{fancypants=`"$SecretValueFromVstsBecauseIDoNotWantToHardcodeInfrastructureRelatedStuffLikeMachineNamesOrCredentials`"; port=$port}}"
             Assert-MockCalled  Import-Module
             # can't check the presvious assert for empty parameters, so check the message
             Assert-MockCalled Write-Verbose -ParameterFilter { $Message -eq "Running Pester using the script [@{Path='.'; Parameters=@{fancypants=`"$SecretValueFromVstsBecauseIDoNotWantToHardcodeInfrastructureRelatedStuffLikeMachineNamesOrCredentials`"; port=$port}}] output sent to [TestDrive:\output.xml]" }

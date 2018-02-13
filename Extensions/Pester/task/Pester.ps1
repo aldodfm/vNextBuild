@@ -59,7 +59,7 @@ param
 
     [string]$script,
 
-    [string]$useScriptFolder   
+    [string]$useScriptFolder ="True" 
 
 )
 
@@ -114,7 +114,7 @@ $Parameters = @{
     OutputFormat = 'NUnitXml'
 }
 
-if ([string]::IsNullOrEmpty($script))
+if (([bool]::Parse($useScriptFolder) -eq $true))
 {
     Write-Verbose "Running Pester from [$scriptFolder] output sent to [$resultsFile]" -verbose
     $Parameters.Add('Script', $scriptFolder)
