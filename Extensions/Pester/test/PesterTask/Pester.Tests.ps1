@@ -8,9 +8,6 @@ Describe "Testing Pester Task" {
         it "Throws Exception when passed an invalid path for ScriptFolder" {
             {&$sut -ScriptFolder TestDrive:\RandomFolder} | Should -Throw
         }
-        it "ScriptFolder is Mandatory" {
-            (Get-Command $sut).Parameters['ScriptFolder'].Attributes.Mandatory | Should -Be $True
-        }
         it "Throws Exception when passed an invalid location for ResultsFile" {
             {&$sut -ScriptFolder TestDrive:\ -ResultsFile TestDrive:\RandomFolder } | Should -Throw
         }
@@ -233,6 +230,21 @@ Describe "Testing Pester Task" {
             Assert-MockCalled  Import-Module
             # can't check the presvious assert for empty parameters, so check the message
             Assert-MockCalled Write-Verbose -ParameterFilter { $Message -eq "No Pester module location parameters passed, and not forcing use of Pester in task, so using Powershell default module location" }
+            Assert-MockCalled Invoke-Pester
+        }
+
+
+        it "Runs pester with a script parameter as opposed a folder path" {
+            mock Invoke-Pester { }
+            mock Import-Module { }
+            Mock Write-Verbose { }
+            Mock Write-Warning { }
+            Mock Write-Error { }
+
+            &$sut -ResultsFile TestDrive:\output.xml -ForceUseOfPesterInTasks "False" -script "@{Path='.'; Parameters=@{fancypants=`"$SecretValueFromVstsBecauseIDoNotWantToHardcodeInfrastructureRelatedStuffLikeMachineNamesOrCredentials`"; port=$port}}"
+            Assert-MockCalled  Import-Module
+            # can't check the presvious assert for empty parameters, so check the message
+            Assert-MockCalled Write-Verbose -ParameterFilter { $Message -eq "Running Pester using the script [@{Path='.'; Parameters=@{fancypants=`"$SecretValueFromVstsBecauseIDoNotWantToHardcodeInfrastructureRelatedStuffLikeMachineNamesOrCredentials`"; port=$port}}] output sent to [TestDrive:\output.xml]" }
             Assert-MockCalled Invoke-Pester
         }
 

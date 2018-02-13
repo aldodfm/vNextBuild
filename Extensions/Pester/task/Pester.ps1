@@ -1,7 +1,6 @@
 [CmdletBinding()]
 param
 (
-    [Parameter(Mandatory)]
     [ValidateScript( {
             Test-Path $_
         })]
@@ -56,7 +55,9 @@ param
         })]
     [string]$CodeCoverageOutputFile,
 
-    [string]$ForceUseOfPesterInTasks
+    [string]$ForceUseOfPesterInTasks,
+
+    [string]$script
 )
 
 
@@ -104,12 +105,19 @@ else {
     Import-Module Pester
 }
 
-Write-Verbose "Running Pester from [$scriptFolder] output sent to [$resultsFile]" -verbose
 $Parameters = @{
     PassThru = $True
     OutputFile = $resultsFile
     OutputFormat = 'NUnitXml'
-    Script = $scriptFolder
+}
+
+if ([string]::IsNullOrEmpty($script))
+{
+    Write-Verbose "Running Pester from [$scriptFolder] output sent to [$resultsFile]" -verbose
+    $Parameters.Add('Script', $scriptFolder)
+} else {
+    Write-Verbose "Running Pester using the script [$script] output sent to [$resultsFile]" -verbose
+    $Parameters.Add('Script', $script)
 }
 
 if ($Tag) {

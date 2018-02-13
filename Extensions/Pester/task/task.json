@@ -31,12 +31,30 @@
   ],
   "inputs": [
     {
+      "name": "useScriptFolder",
+      "type": "boolean",
+      "label": "Use script folder",
+      "defaultValue": "True",
+      "required": true,
+      "helpMarkDown": "If true uses script folder for test location, if false used script hashtable"
+    },
+    {
       "name": "scriptFolder",
       "type": "string",
       "label": "Scripts Folder",
       "defaultValue": "$(Build.SourcesDirectory)\\*",
       "required": true,
-      "helpMarkDown": "Folder to run scripts from"
+      "helpMarkDown": "Folder to run scripts from",
+      "visibleRule": "mode = useScriptFolder"
+    },
+    {
+      "name": "script",
+      "type": "string",
+      "label": "Script Parameter",
+      "defaultValue": "@{Path='$(Build.SourcesDirectory)'; Parameters=@{param1=\"111\"; param2=\"222\"}}",
+      "required": true,
+      "helpMarkDown": "Script parmaters to run",
+      "visibleRule": "mode != useScriptFolder"
     },
     {
       "name": "resultsFile",
