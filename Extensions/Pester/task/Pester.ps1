@@ -57,7 +57,10 @@ param
 
     [string]$ForceUseOfPesterInTasks,
 
-    [string]$script
+    [string]$script,
+
+    [string]$useScriptFolder   
+
 )
 
 
